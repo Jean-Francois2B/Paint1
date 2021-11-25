@@ -107,7 +107,7 @@ public class Window extends JFrame implements ActionListener{
         JPanel panneau3 = new JPanel();
         panneau3.setLayout(new GridLayout(1,2));
         panneau3.add(panneau1);
-        panneau1.add(panneau2);
+        panneau3.add(panneau2);
 
         setJMenuBar(m);
         contentPanel.add(new JTextArea(""),"Center");

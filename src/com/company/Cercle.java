@@ -24,6 +24,6 @@ public class Cercle extends Ellipse{
     @Override
     public void setBoundingBox(int length, int width) {
         this.petitaxe = length;
-        this.grandaxe = width;
+        this.grandaxe = length;
     }
 }

@@ -26,6 +26,6 @@ public class Square extends Rectangle{
     @Override
     public void setBoundingBox(int length, int width) {
         this.longueur = length;
-        this.largeur = width;
+        this.largeur = length;
     }
 }

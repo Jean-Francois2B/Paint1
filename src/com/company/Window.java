@@ -164,9 +164,9 @@ public class Window extends JFrame implements ActionListener{
                 break;
             case "New" : dessin.reset();
                 break;
+            case "Open" : dessin.open();
+                break;
             case "Save" :  dessin.save();
-                JOptionPane save = new JOptionPane();
-                save.showInternalMessageDialog(save, "Votre oeuvre a bien été enregistré et prète à être exposée au Louvres !!");
                 break;
             case "Authors" : JOptionPane info = new JOptionPane();
                 info.showInternalMessageDialog(info, "Authors : Jean-François Castellani", "Une petite oeuvre bien sympatique",JOptionPane.INFORMATION_MESSAGE);

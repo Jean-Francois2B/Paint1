@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Drawing extends JPanel implements MouseListener, MouseMotionListener {
 
@@ -17,7 +17,7 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
     protected int x;
     protected int y;
 
-    public Drawing(){
+    public Drawing() {
         super();
         this.color = Color.black;
         this.nameFigure = "Rectangle";
@@ -26,20 +26,20 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
         this.addMouseMotionListener(this);
     }
 
-    public void paintComponent(Graphics graphics){
+    public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         this.setBackground(Color.white);
-        for(Figure figure : list){
+        for (Figure figure : list) {
             figure.draw(graphics);
         }
     }
 
 
-    public void setColor(Color cl){
+    public void setColor(Color cl) {
         this.color = cl;
     }
 
-    public void setNameFigure(String nFig){
+    public void setNameFigure(String nFig) {
         this.nameFigure = nFig;
     }
 
@@ -60,24 +60,26 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
     public void mousePressed(MouseEvent e) {
         x = e.getX();
         y = e.getY();
-        switch (nameFigure){
-            case "Rectangle" : list.add(new Rectangle(x,y,color));
+        switch (nameFigure) {
+            case "Rectangle":
+                list.add(new Rectangle(x, y, color));
                 break;
-            case "Ellipse" : list.add(new Ellipse(x,y,color));
+            case "Ellipse":
+                list.add(new Ellipse(x, y, color));
                 break;
-            case "Circle" : list.add(new Cercle(x,y,color));
+            case "Circle":
+                list.add(new Cercle(x, y, color));
                 break;
-            case "Square" : list.add(new Square(x,y,color));
+            case "Square":
+                list.add(new Square(x, y, color));
                 break;
         }
-        System.out.println(("x"));
-        System.out.println(("y"));
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        list.get(list.size()-1).setBoundingBox(e.getX()-x, e.getY()-y);
+        list.get(list.size() - 1).setBoundingBox(e.getX() - x, e.getY() - y);
         paintComponent(this.getGraphics());
     }
 
@@ -93,7 +95,7 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        list.get(list.size()-1).setBoundingBox(e.getX()-x,e.getY()-y);
+        list.get(list.size() - 1).setBoundingBox(e.getX() - x, e.getY() - y);
         paintComponent(this.getGraphics());
     }
 
@@ -102,27 +104,44 @@ public class Drawing extends JPanel implements MouseListener, MouseMotionListene
 
     }
 
-    public void reset(){
+    public void reset() {
         list.clear();
         super.paintComponent(this.getGraphics());
     }
 
-    public void save(){
+    public void open(){
+        JFileChooser file = new JFileChooser();
+        if (file.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            file.getSelectedFile().getAbsolutePath();
+        }
+        try {
+            FileInputStream fis = new FileInputStream(file.getSelectedFile().getAbsolutePath());
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            this.list.clear();
+            paintComponent((this.getGraphics()));
+            list = (ArrayList<Figure>) ois.readObject();
+            repaint();
+            ois.close();
+        }
+        catch (Exception e){
+            System.out.println("Problème !");
+        }
+    }
+
+    public void save() {
+        JFileChooser file = new JFileChooser();
+        if (file.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            file.getSelectedFile().getAbsolutePath();}
         try{
-            FileOutputStream fos = new FileOutputStream("saveDessin");
+            FileOutputStream fos = new FileOutputStream(file.getSelectedFile().getAbsolutePath());
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-            oos.writeInt(list.size());
-            for (Figure f : list ){
-                oos.writeObject(f);
-            }
+            oos.writeObject(list);
             oos.close();
-            System.out.println("Bien joué mon gars !");
-
         }
         catch(Exception e){
-            System.out.println("Problèmes!");
+            System.out.println("Problème !");
         }
     }
 }
+
 
